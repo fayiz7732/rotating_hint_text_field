@@ -4,6 +4,8 @@ A Flutter widget that provides an animated hint text functionality for a `TextFo
 
 ## Features
 
+![](assets/hint_text.gif)
+
 - Animated hint text that fades and slides in/out.
 - Customizable animation duration and switching interval.
 - Support for multi-line text fields.

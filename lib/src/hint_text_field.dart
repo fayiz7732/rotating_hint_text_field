@@ -1,29 +1,40 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
+/// A custom animated hint text field widget that rotates through a list of hint texts.
+///
+/// This widget provides an animated text field where the hint text cycles through a list of hints with fade and slide animations.
+/// It supports various customization options for text appearance, text field borders, and animation effects.
+///
+/// **Example Usage:**
+/// ```dart
+/// AnimatedHintTextField(
+///   controller: _controller,
+///   hintTexts: ['Hint 1', 'Hint 2', 'Hint 3'],
+/// )
+/// ```
+///
+/// **Properties:**
+/// - [controller]: A [TextEditingController] to manage the text field input.
+/// - [hintTexts]: A list of strings to be used as hint texts. The widget will cycle through them with animation.
+/// - [animationDuration]: Duration of the animation for switching hint texts (default is 500 ms).
+/// - [switchDuration]: Duration for how long each hint text is displayed before switching (default is 2 seconds).
+/// - [style]: The style for the text input (optional).
+/// - [hintStyle]: The style for the hint text (optional).
+/// - [hintTextColor]: The color of the hint text (optional).
+/// - [focusedBorderColor]: The border color when the text field is focused (optional).
+/// - [unfocusedBorderColor]: The border color when the text field is not focused (optional).
+/// - [borderRadius]: The radius of the text field's border (default is 8.0).
+/// - [decoration]: Custom decoration for the text field (optional).
+/// - [maxLines]: The maximum number of lines for the text field (default is 1).
+/// - [minLines]: The minimum number of lines for the text field (default is 1).
+/// - [hintAlignment]: The alignment of the hint text inside the text field (default is [Alignment.centerLeft]).
+/// - [contentPadding]: Padding inside the text field (default is [EdgeInsets.all(12.0)]).
+/// - [enableAnimation]: Whether to enable hint text animation (default is true).
+/// - [animationCurve]: The curve for the animation (default is [Curves.easeInOut]).
 class AnimatedHintTextField extends StatefulWidget {
-  final TextEditingController controller;
-  final List<String> hintTexts;
-  final Duration animationDuration;
-  final Duration switchDuration;
-  final TextStyle? style;
-  final TextStyle? hintStyle;
-  final Color? hintTextColor;
-  final Color? focusedBorderColor;
-  final Color? unfocusedBorderColor;
-  final double borderRadius;
-  final InputDecoration? decoration;
-  final int maxLines;
-  final int minLines;
-  final Alignment hintAlignment;
-  final EdgeInsetsGeometry contentPadding;
-  final bool enableAnimation;
-  final Curve animationCurve;
-  final FocusNode? focusNode;
-  final EdgeInsetsGeometry?
-      hintPadding; // Add hintPadding for hint text padding
-  final VoidCallback? onTapOutside; // Add onTapOutside callback
-
+  /// Creates an [AnimatedHintTextField] widget with the provided properties.
   const AnimatedHintTextField({
     required this.controller,
     required this.hintTexts,
@@ -43,10 +54,70 @@ class AnimatedHintTextField extends StatefulWidget {
     this.enableAnimation = true,
     this.animationCurve = Curves.easeInOut,
     this.focusNode,
-    this.hintPadding, // Initialize hintPadding
-    this.onTapOutside, // Initialize onTapOutside
+    this.hintPadding,
+    this.onTapOutside,
     super.key,
   });
+
+  /// The curve for the animation.
+  final Curve animationCurve;
+
+  /// The duration of the animation for switching between hint texts.
+  final Duration animationDuration;
+
+  /// The border radius of the text field.
+  final double borderRadius;
+
+  /// The padding for the content inside the text field.
+  final EdgeInsetsGeometry contentPadding;
+
+  /// The controller for managing the text field input.
+  final TextEditingController controller;
+
+  /// The decoration for the text field.
+  final InputDecoration? decoration;
+
+  /// Whether to enable the animation for switching hint texts.
+  final bool enableAnimation;
+
+  /// The focus node for the text field.
+  final FocusNode? focusNode;
+
+  /// The color of the border when the text field is focused.
+  final Color? focusedBorderColor;
+
+  /// The alignment of the hint text within the text field.
+  final Alignment hintAlignment;
+
+  /// The padding for the hint text.
+  final EdgeInsetsGeometry? hintPadding;
+
+  /// The style for the hint text.
+  final TextStyle? hintStyle;
+
+  /// The color of the hint text.
+  final Color? hintTextColor;
+
+  /// The list of hint texts to rotate through.
+  final List<String> hintTexts;
+
+  /// The maximum number of lines for the text field.
+  final int maxLines;
+
+  /// The minimum number of lines for the text field.
+  final int minLines;
+
+  /// Callback function to be triggered when tapping outside the text field.
+  final VoidCallback? onTapOutside;
+
+  /// The style for the text field's text.
+  final TextStyle? style;
+
+  /// The duration for how long each hint text is displayed before switching.
+  final Duration switchDuration;
+
+  /// The color of the border when the text field is not focused.
+  final Color? unfocusedBorderColor;
 
   @override
   _AnimatedHintTextFieldState createState() => _AnimatedHintTextFieldState();
@@ -54,17 +125,45 @@ class AnimatedHintTextField extends StatefulWidget {
 
 class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
     with SingleTickerProviderStateMixin {
-  late Timer _switchTimer;
+  // Animation controller for the hint text animations.
   late AnimationController _animController;
-  late Animation<double> _fadeOutAnimation;
+
+  // Notifier for the current index of the hint text.
+  ValueNotifier<int> _currentIndexNotifier = ValueNotifier<int>(0);
+
+  // Whether a custom focus node is provided.
+  bool _customFocusNode = false;
+
+  // Fade in animation for the hint text.
   late Animation<double> _fadeInAnimation;
-  late Animation<Offset> _slideOutAnimation;
+
+  // Fade out animation for the hint text.
+  late Animation<double> _fadeOutAnimation;
+
+  // Focus node for the text field.
+  late FocusNode _focusNode;
+
+  // Notifier for whether the user is typing in the text field.
+  ValueNotifier<bool> _isTypingNotifier = ValueNotifier<bool>(false);
+
+  // Slide in animation for the hint text.
   late Animation<Offset> _slideInAnimation;
 
-  ValueNotifier<int> _currentIndexNotifier = ValueNotifier<int>(0);
-  ValueNotifier<bool> _isTypingNotifier = ValueNotifier<bool>(false);
-  late FocusNode _focusNode;
-  bool _customFocusNode = false;
+  // Slide out animation for the hint text.
+  late Animation<Offset> _slideOutAnimation;
+
+  // Timer to periodically switch hint texts.
+  late Timer _switchTimer;
+
+  @override
+  void dispose() {
+    _switchTimer.cancel();
+    _animController.dispose();
+    _currentIndexNotifier.dispose();
+    _isTypingNotifier.dispose();
+    if (!_customFocusNode) _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -112,6 +211,7 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
     _focusNode.addListener(() => setState(() {}));
   }
 
+  /// Animates to the next hint text in the list.
   void _animateToNextHint() {
     int nextIndex = (_currentIndexNotifier.value + 1) % widget.hintTexts.length;
     if (widget.enableAnimation) {
@@ -122,16 +222,6 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
     } else {
       _currentIndexNotifier.value = nextIndex;
     }
-  }
-
-  @override
-  void dispose() {
-    _switchTimer.cancel();
-    _animController.dispose();
-    _currentIndexNotifier.dispose();
-    _isTypingNotifier.dispose();
-    if (!_customFocusNode) _focusNode.dispose();
-    super.dispose();
   }
 
   @override

@@ -1,7 +1,7 @@
 name: rotating_hint_text_field
 description: "AnimatedHintTextField is a Flutter widget with animated hint text transitions."
-version: 0.0.1
-homepage:
+version: 0.0.3
+homepage: https://github.com/fayiz7732/rotating_hint_text_field
 
 environment:
   sdk: ^3.5.4
@@ -23,8 +23,8 @@ dev_dependencies:
 flutter:
 
   # To add assets to your package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/hint_text.gif
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
