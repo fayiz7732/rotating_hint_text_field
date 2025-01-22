@@ -268,7 +268,10 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
                     return ValueListenableBuilder<bool>(
                       valueListenable: _isTypingNotifier,
                       builder: (context, isTyping, _) {
-                        if (isTyping) return const SizedBox.shrink();
+                        // Prevent showing hint text if the controller has text
+                        if (isTyping || widget.controller.text.isNotEmpty) {
+                          return const SizedBox.shrink();
+                        }
                         return Stack(
                           children: [
                             SlideTransition(
