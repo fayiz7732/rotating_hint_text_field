@@ -1,5 +1,9 @@
 ###Changelog
 
+## 0.0.6
+- Fixed an issue where hint text was displayed even when the TextEditingController had text in it
+- Updated logic to hide the hint text when the user has entered text or the field has content, even when unfocused
+
 ## 0.0.5
 - Updated the GIF in the documentation to the latest version
 - Improved formatting in the documentation for better readability
