@@ -1,10 +1,11 @@
-# AnimatedHintTextField
+# Rotating Hint TextField
 
 A Flutter widget that provides an animated hint text functionality for a `TextFormField`. The hint text can change periodically with animation effects like fading and sliding in/out. This widget can be used to improve the user experience in forms and text input fields.
 
 ## Features
 
-![](assets/hint_text.gif)
+![](https://raw.githubusercontent.com/fayiz7732/rotating_hint_text_field/main/assets/hint_text.gif)
+
 
 - Animated hint text that fades and slides in/out.
 - Customizable animation duration and switching interval.

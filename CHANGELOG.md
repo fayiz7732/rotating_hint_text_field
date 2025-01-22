@@ -1,4 +1,13 @@
-#Changelog
+###Changelog
+
+## 0.0.5
+- Updated the GIF in the documentation to the latest version
+- Improved formatting in the documentation for better readability
+- Enhanced code with minor optimizations for better performance and maintainability
+
+## 0.0.4
+- Fixed a bug where the GIF was not being displayed correctly
+- Improved the documentation to include more detailed explanations and examples
 
 ## 0.0.3
 - Added sample gif 
