@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 /// A custom animated hint text field widget that rotates through a list of hint texts.
 ///
-/// This widget provides an animated text field where the hint text cycles through a list of hints with fade and slide animations.
+/// This widget provides an animated text field where the hint text cycles through them with fade and slide animations.
 /// It supports various customization options for text appearance, text field borders, and animation effects.
 ///
 /// **Example Usage:**
@@ -170,6 +170,7 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
     super.initState();
 
     _customFocusNode = widget.focusNode != null;
+
     _focusNode = widget.focusNode ?? FocusNode();
 
     _animController = AnimationController(
@@ -180,9 +181,11 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
     _fadeOutAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(parent: _animController, curve: const Interval(0.0, 0.5)),
     );
+
     _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animController, curve: const Interval(0.5, 1.0)),
     );
+
     _slideOutAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(0.0, -0.5),
@@ -190,6 +193,7 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
       parent: _animController,
       curve: const Interval(0.0, 0.5),
     ));
+
     _slideInAnimation = Tween<Offset>(
       begin: const Offset(0.0, 0.5),
       end: Offset.zero,
@@ -212,15 +216,24 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
   }
 
   /// Animates to the next hint text in the list.
+
   void _animateToNextHint() {
     int nextIndex = (_currentIndexNotifier.value + 1) % widget.hintTexts.length;
+
+    // Trigger the animation if enabled
     if (widget.enableAnimation) {
       _animController.forward().then((_) {
-        _currentIndexNotifier.value = nextIndex;
-        _animController.reset();
+        setState(() {
+          _currentIndexNotifier.value =
+              nextIndex; // Change the text only after animation completes
+        });
+        _animController.reset(); // Reset animation for the next cycle
       });
     } else {
-      _currentIndexNotifier.value = nextIndex;
+      setState(() {
+        _currentIndexNotifier.value =
+            nextIndex; // Change text instantly without animation
+      });
     }
   }
 
@@ -228,6 +241,7 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        
         TextFormField(
           controller: widget.controller,
           focusNode: _focusNode,
@@ -290,7 +304,6 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
                                         TextStyle(
                                           color: widget.hintTextColor ??
                                               Colors.grey,
-                                          fontSize: 16,
                                         ),
                                   ),
                                 ),
@@ -304,8 +317,7 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
                                   padding:
                                       widget.hintPadding ?? EdgeInsets.zero,
                                   child: Text(
-                                    widget.hintTexts[(currentIndex + 1) %
-                                        widget.hintTexts.length],
+                                    widget.hintTexts[currentIndex],
                                     style: widget.hintStyle?.copyWith(
                                           color: widget.hintTextColor ??
                                               Colors.grey,
@@ -313,7 +325,6 @@ class _AnimatedHintTextFieldState extends State<AnimatedHintTextField>
                                         TextStyle(
                                           color: widget.hintTextColor ??
                                               Colors.grey,
-                                          fontSize: 16,
                                         ),
                                   ),
                                 ),
