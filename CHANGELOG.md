@@ -1,5 +1,8 @@
 ###Changelog
 
+## 0.0.9
+- Added proper formatting
+
 ## 0.0.8
 - Added proper formatting
 - Enhanced code with minor optimizations for better performance and maintainability
