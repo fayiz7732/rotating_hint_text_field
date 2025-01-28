@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   rotating_hint_text_field:
-    path: ../../rotating_hint_text_field    
+    path: ../  
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,5 +1,9 @@
 ###Changelog
 
+## 0.0.8
+- Added proper formatting
+- Enhanced code with minor optimizations for better performance and maintainability
+
 ## 0.0.7
 - Added new properties: animationCurve, hintAlignment, hintPadding, style.
 - Improved hint text animation.
